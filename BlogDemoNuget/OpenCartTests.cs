@@ -1,42 +1,42 @@
 using AdvUITestLogger;
 using BlogDemoNuget.Pages;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
 namespace BlogDemoNuget
 {
-    [TestClass]
+    [TestFixture]
     public class OpenCartTests
     {
         //CREATE A TEST CONTEXT
-        private TestContext testContextInstance;
-        public TestContext TestContext
-        {
-            get { return testContextInstance; }
-            set { testContextInstance = value; }
-        }
+        //private TestContext testContextInstance;
+        //public TestContext TestContext
+        //{
+        //    get { return testContextInstance; }
+        //    set { testContextInstance = value; }
+        //}
 
         IWebDriver driver;
 
-        [TestInitialize]
+        [SetUp]
         public void Initialize()
         {
             driver = new ChromeDriver(@"C:\Users\edwinh\source\repos\BlogDemoNuget\BlogDemoNuget");
             
 
             //INITIALIZE LOGGER:
-            AdvLogger.imageSize = 400;
-            AdvLogger.includeSnapshootsForPassAndError = true;
-            AdvLogger.onHoverImageSizeAsPercentageOfWindow = 50;
-            AdvLogger.Current.LOGLEVEL = 3;     //Logger will include only messages at specified level or above. Level=1 means no filters
-                                                //levels: 1=info, 2-passed, 3-warning, 4-error
+            AdvLogger.imageSize = 400;                                  //In Pixels. Default is 300
+            AdvLogger.includeSnapshootsForPassAndError = true;          //Only Pass and Error levels include snapshots. Default is true
+            AdvLogger.onHoverImageSizeAsPercentageOfWindow = 50;        //How big you want your screenhots to expant to. Default is 100% of browser screen width.
+            AdvLogger.Current.LOGLEVEL = 3;                             //Logger will include only messages at specified level or above. Level=1 means no filters
+                                                                        //levels: 1=info, 2-passed, 3-warning, 4-error
             
                                                 
 
         }
 
-        [TestMethod]
+        [Test]
         public void OpenCart_ValidateReviewSubmision()
         {
             AdvLogger.Current.InsertDividerForNewTest();
@@ -64,11 +64,11 @@ namespace BlogDemoNuget
             AdvLogger.Current.LogMessage("Info", driver, "REACHED END OF TEST CASE");
         }
 
-        [TestCleanup]
+        [TearDown]
         public void CleanUp()
         {
             driver.Quit();
-            var fileName = AdvLogger.Current.EndLogging(TestContext);
+            var fileName = AdvLogger.Current.EndLogging(TestContext.CurrentContext);
             System.Diagnostics.Process.Start("explorer.exe", fileName);
 
         }
